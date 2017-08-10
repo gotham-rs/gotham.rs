@@ -1,0 +1,22 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html bg="light" %}
+    <body>
+      {% include top_nav.html %}
+
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            {% for post in site.posts %}
+              {% include article.html article=post %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% include footer.html %}
+    </body>
+</html>

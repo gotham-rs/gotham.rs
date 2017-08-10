@@ -1,0 +1,35 @@
+            <article>
+              <header>
+                <h2 class="text-center">{{ include.article.title }}</h2>
+
+                <div class="metadata row">
+                  <div class="publication col-6 text-right">
+                    <div class="date">
+                      <time>{{ include.article.date }}</time>
+                    </div>
+                  </div>
+                  <div class="author col-6 col-left">
+                    <div class="name">
+                      <img class="rounded-circle" src="/assets/images/{{ include.article.author.avatar }}.jpg" alt="{{ include.article.author.name }} photo/avatar"
+                        width="25" height="25">
+                      <span alt="author">{{ include.article.author.name }}</span>
+                    </div>
+                    <div class="social">
+                      <a href="https://twitter.com/{{ include.article.author.twitter }}"><img width="18" height="18" alt="{{ include.article.author.twitter }} on Twitter" src="/assets/images/twitter.svg" alt="{{ include.article.author.name }} Twitter account"></a>
+                      <a href="https://github.com/{{ include.article.author.github }}" alt="{{ include.article.author.name }} GitHub account"><img width="18" height="18" alt="Bradley Beddoes on
+                        Github" src="/assets/images/github.svg"></a>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              {% if include.article.focal.img %}
+              <div class="focal">
+                <img class="img-fluid" src="{{ include.article.focal.img }} " alt="">
+                <small><a href="{{ include.article.focal.attr.href }}">{{ include.article.focal.attr.display }}</a></small>
+              </div>
+              {% endif %}
+
+              {{ include.article.content }}
+
+            </article>

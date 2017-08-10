@@ -1,0 +1,391 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html bg="dark" %}
+    <body>
+      {% include top_nav.html %}
+
+      <div id="splash" class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-9">
+            <div id="blurb">
+              <h2>Introducing Gotham 0.1</h2> 
+              <p>A flexible web framework that does not sacrifice safety, security or speed.</p>
+            </div>
+          </div>
+          <div class="hidden-sm-down col-md-5"></div>
+        </div>
+      </div>
+
+      <div id="features" class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <h2>Features</h2>
+            <div class="card-deck">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Built with Rust</h3>
+                  <p class="card-text">
+                  <a href="https://www.rust-lang.org" alt="Rust wbesite">Rust</a> is a programming language that’s focused on safety, speed, and concurrency. It offers 
+                     all the performance and control of a low-level language, but with the powerful abstractions of a
+                     high-level language.
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Stability Focused</h3>
+                  <p class="card-text">
+                  Gotham targets <strong>stable</strong> Rust. This will never change.
+                  </p>
+                  <p class="card-text">
+                    Gotham is also automatically tested against Rust beta and nightly.
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">No Garbage Collection</h3>
+                  <p class="card-text">
+                  One of Rust’s key innovations is guaranteeing memory safety without requiring garbage collection.
+                  Gotham based applications automatically benefit from the predictability and performance of a system
+                  without garbage collection.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="card-deck">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Statically Typed</h3>
+                  <p class="card-text">
+                    Unlike many other web frameworks Gotham is statically typed ensuring your
+                    entire application is <strong>correctly expressed</strong> at compile time. 
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Async Everything</h3>
+                  <p class="card-text">
+                    By leveraging <a href="https://tokio.rs" alt="Tokio website">Tokio</a>, Gotham types are async out of the box.
+                  </p>
+                  <p class="card-text">
+                    Our async story is further enhanced by <a href="https://hyper.rs" alt="Hyper website">Hyper</a>,
+                    a fast server that provides an elegant layer over stringly typed HTTP.
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Blazingly Fast</h3>
+                  <p class="card-text">
+                    Measure completed requests, including the 99th percentile, in <strong><abbr title="microseconds">µs</abbr></strong>.  
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="code" class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+              <h2>Tour</h2>
+              
+              <ul class="nav nav-pills nav-fill flex-wrap" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#controllers" role="tab">Controllers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link " data-toggle="tab" href="#extractors" role="tab">Extractors</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#middleware" role="tab">Middleware</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#routing" role="tab">Routing</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#launching" role="tab">Launching</a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="controllers" role="tabpanel">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                  <div class="code-header">
+                    Controller
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+use hyper::Request;
+use gotham::state::State;
+
+pub fn index(mut state: State, req: Request) -> (State, Response) {
+  let res = create_response(&state, StatusCode::Ok, None);
+  (state, res)
+}
+                      </code>
+                    </pre>
+                  </div>
+
+                  <div class="code-header">
+                    HTTP Request  
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs shell">
+$ curl -v http://127.0.0.1:7878/
+
+* Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 7878 (#0)
+> GET /
+> Host: 127.0.0.1:7878
+> User-Agent: curl/7.54.1
+>
+< HTTP/1.1 200 OK
+< Content-Type: application/jrd+json
+< Content-Length: 126
+< Date: Fri, 21 Jul 2017 06:21:16 GMT
+
+* Connection #0 to host 127.0.0.1 left intact
+%
+                      </code>
+                    </pre>
+                  </div>
+                  </p>
+                </div>
+                <div class="tab-pane " id="extractors" role="tabpanel">
+                  <p>
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                  </p>
+                  <div class="code-header">
+                    QueryStringExtractor
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+                <div class="tab-pane " id="middleware" role="tabpanel">
+                  <p>
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                  </p>
+                  <div class="code-header">
+                    Middleware
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+                <div class="tab-pane " id="routing" role="tabpanel">
+                  <p>
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                  </p>
+                  <div class="code-header">
+                    Routes
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+                <div class="tab-pane " id="launching" role="tabpanel">
+                  <p>
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                  </p>
+                  <div class="code-header">
+                    Main
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="community" class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <h2>Community</h2>
+            <div class="card-deck">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">GitHub</h3>
+                  <ul class="list-unstyled">
+                    <li>
+                      <a href="https://github.com/gotham-rs/gotham" alt="Gotham framework on GitHub">Gotham Framework</a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/gotham-rs/example-app" alt="Example application of GitHub">Example App</a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/gotham-rs/policies" alt="Gotham policies on GitHub">Policies</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">News</h3>
+                  <ul class="list-unstyled">
+                    <li>
+                      <a href="/blog" alt="Gotham Blog">Blog</a>
+                    </li>
+                    <li>
+                      <a href="https://twitter.com/gotham_rs" alt="Gotham Twitter">Twitter</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-deck">
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Policies</h3>
+                  <p class="card-text">
+                    Gotham is a young project that we want to create an energetic and respectful community around. 
+                  </p>
+                  <p class="card-text">
+                    As a starting point we've adopted the following <a
+                      href="https://github.com/gotham-rs/policies">policies</a> 
+                    which we'd like your help in refining further.
+                  </p>
+                  <p class="card-text">
+                    These policies are in effect for any environment or tool that supports the Gotham project.
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                  <h3 class="card-title">Help</h3>
+
+                  <h4>Documentation</h4>
+                  <ul class="list-unstyled">
+                    <li>
+                      <a href="https://book.gotham.rs">Book</a>
+                    </li>
+                    <li>
+                      <a href="https://docs.rs/gotham">API Docs</a>
+                    </li>
+                  </ul>
+
+                  <h4>IRC</h4>
+                  <p class="card-text">
+                    We collaborate on the <a href="https://chat.mibbit.com/?server=irc.mozilla.org&channel=%23gotham" alt="Gotham IRC channel">#gotham</a> 
+                    channel on irc.mozilla.org. Gotham specific chat and requests for help are both very welcome here.
+                  </p>
+                  <p class="card-text">
+                    Additionally the Gotham core team often hang out in <a
+                      href="https://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust-webdev" alt="Rust web development IRC channel">#rust-webdev</a>
+                    and <a href="https://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust" alt="Rust IRC channel for all things rust">#rust</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="team" class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <h2>Core Team</h2>
+            <p>
+              The core team is tasked with advancing the Gotham web framework.
+            </p>
+            <p>
+              As the project continues to mature so will our processes around core team membership, 
+              roles and responsibilities. This will be documented within our 
+              <a href="https://github.com/gotham-rs/policies" alt="Gotham policies on GitHub">policies</a> repository.
+            </p>
+
+            <h3>Current Members</h3>
+            <div class="card-deck col-md-6">
+             <div class="card">
+                <div class="card-block">
+                  <div class="text-center">
+                    <img class="rounded-circle" src="/assets/images/smangelsdorf.jpg" alt="Shaun Mangelsdorf photo/avatar"
+                    width="75" height="75">
+                  </div>
+                  <h4 class="card-title">Shaun Mangelsdorf</h4>
+                  <span class="team team-founder">Founder</span>
+                  <div class="card-text">
+                    <ul class="list-unstyled card-text">
+                      <li>
+                        <a href="https://github.com/smangelsdorf" alt="Shaun Mangelsdorf's GitHub">GitHub</a> 
+                      </li>
+                      <li>
+                        <a href="https://twitter.com/mangelsdorf" alt="Shaun Mangelsdorf's Twitter">Twitter</a> 
+                      </li>
+                      <li>
+                        IRC: shaun
+                      </li>
+                      <li>
+                        City: Brisbane, Australia 🇦🇺
+                      </li>
+                      <li>
+                        Timezone: GMT+10.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div> <div class="card">
+                <div class="card-block">
+                  <div class="text-center">
+                    <img class="rounded-circle" src="/assets/images/bradleybeddoes.jpg" alt="Bradley Beddoes photo/avatar"
+                    width="75" height="75">
+                  </div>
+                  <h4 class="card-title">Bradley Beddoes </h4>
+                  <span class="team team-founder">Founder</span>
+                  <div class="card-text">
+                    <ul class="list-unstyled card-text">
+                      <li>
+                        <a href="https://github.com/bradleybeddoes" alt="Bradley Beddoes' GitHub">GitHub</a> 
+                      </li>
+                      <li>
+                        <a href="https://twitter.com/bradleybeddoes" alt="Bradley Beddoes Twitter">Twitter</a> 
+                      </li>
+                      <li>
+                        IRC: bradley
+                      </li>
+                      <li>
+                        City: Brisbane, Australia 🇦🇺
+                      </li>
+                      <li>
+                        Timezone: GMT+10. 
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include footer.html %}
+    </body>
+</html>
