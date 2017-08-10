@@ -199,7 +199,6 @@ PLATFORMS
 DEPENDENCIES
   github-pages
   jekyll-feed (~> 0.6)
-  jekyll-paginate
   tzinfo-data
 
 BUNDLED WITH

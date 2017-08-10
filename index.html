@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-12 col-md-9">
             <div id="blurb">
-              <h2>Introducing Gotham 0.1</h2> 
+              <h2>Introducing Gotham 0.1</h2>
               <p>A flexible web framework that does not sacrifice safety, security or speed.</p>
             </div>
           </div>
@@ -28,7 +28,7 @@
                 <div class="card-block">
                   <h3 class="card-title">Built with Rust</h3>
                   <p class="card-text">
-                  <a href="https://www.rust-lang.org" alt="Rust wbesite">Rust</a> is a programming language that’s focused on safety, speed, and concurrency. It offers 
+                  <a href="https://www.rust-lang.org" alt="Rust wbesite">Rust</a> is a programming language that’s focused on safety, speed, and concurrency. It offers
                      all the performance and control of a low-level language, but with the powerful abstractions of a
                      high-level language.
                   </p>
@@ -62,7 +62,7 @@
                   <h3 class="card-title">Statically Typed</h3>
                   <p class="card-text">
                     Unlike many other web frameworks Gotham is statically typed ensuring your
-                    entire application is <strong>correctly expressed</strong> at compile time. 
+                    entire application is <strong>correctly expressed</strong> at compile time.
                   </p>
                 </div>
               </div>
@@ -82,7 +82,7 @@
                 <div class="card-block">
                   <h3 class="card-title">Blazingly Fast</h3>
                   <p class="card-text">
-                    Measure completed requests, including the 99th percentile, in <strong><abbr title="microseconds">µs</abbr></strong>.  
+                    Measure completed requests, including the 99th percentile, in <strong><abbr title="microseconds">µs</abbr></strong>.
                   </p>
                 </div>
               </div>
@@ -95,10 +95,10 @@
         <div class="row">
           <div class="col-12">
               <h2>Tour</h2>
-              
+
               <ul class="nav nav-pills nav-fill flex-wrap" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="tab" href="#controllers" role="tab">Controllers</a>
+                  <a class="nav-link active" data-toggle="tab" href="#handlers" role="tab">Handlers</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link " data-toggle="tab" href="#extractors" role="tab">Extractors</a>
@@ -107,57 +107,49 @@
                   <a class="nav-link" data-toggle="tab" href="#middleware" role="tab">Middleware</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="tab" href="#routing" role="tab">Routing</a>
-                </li>
-                <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#launching" role="tab">Launching</a>
                 </li>
               </ul>
 
               <div class="tab-content">
-                <div class="tab-pane active" id="controllers" role="tabpanel">
+                <div class="tab-pane active" id="handlers" role="tabpanel">
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    A handler is a Rust function which generates a response to a HTTP request.
                   </p>
                   <div class="code-header">
-                    Controller
+                    Handler
                   </div>
                   <div>
                     <pre>
                       <code class="hljs rust">
-use hyper::Request;
-use gotham::state::State;
+pub fn greet(state: State, _req: Request) -&gt; (State, Response) {
+    let greeting = match GreetRequestPath::borrow_from(&amp;state).name {
+        Some(ref name) =&gt; format!("Hello, {}!\n", name),
+        None =&gt; "Hello, world!\n".to_owned(),
+    };
 
-pub fn index(mut state: State, req: Request) -> (State, Response) {
-  let res = create_response(&state, StatusCode::Ok, None);
-  (state, res)
+    let res = create_response(
+        &amp;state,
+        StatusCode::Ok,
+        Some((greeting.into_bytes(), mime::TEXT_PLAIN)),
+    );
+
+    (state, res)
 }
                       </code>
                     </pre>
                   </div>
 
                   <div class="code-header">
-                    HTTP Request  
+                    HTTP Request
                   </div>
                   <div>
                     <pre>
                       <code class="hljs shell">
-$ curl -v http://127.0.0.1:7878/
-
-* Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to 127.0.0.1 (127.0.0.1) port 7878 (#0)
-> GET /
-> Host: 127.0.0.1:7878
-> User-Agent: curl/7.54.1
->
-< HTTP/1.1 200 OK
-< Content-Type: application/jrd+json
-< Content-Length: 126
-< Date: Fri, 21 Jul 2017 06:21:16 GMT
-
-* Connection #0 to host 127.0.0.1 left intact
-%
+$ curl http://localhost:7878/greet
+Hello, world!
+$ curl http://localhost:7878/greet/Rustaceans
+Hello, Rustaceans!
                       </code>
                     </pre>
                   </div>
@@ -165,49 +157,125 @@ $ curl -v http://127.0.0.1:7878/
                 </div>
                 <div class="tab-pane " id="extractors" role="tabpanel">
                   <p>
-                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Extractors parse request data into type-safe structures provided by your application.
                   </p>
+                  <div class="code-header">
+                    PathExtractor
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+#[derive(StateData, FromState, PathExtractor, StaticResponseExtender)]
+pub struct ChallengeRequestPath {
+    pub name: String,
+}
+                      </code>
+                    </pre>
+                  </div>
                   <div class="code-header">
                     QueryStringExtractor
                   </div>
                   <div>
                     <pre>
                       <code class="hljs rust">
+#[derive(StateData, FromState, QueryStringExtractor, StaticResponseExtender)]
+pub struct ChallengeQueryString {
+    pub count: Option&lt;u8&gt;,
+}
+                      </code>
+                    </pre>
+                  </div>
+                  <div class="code-header">
+                    Handler
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs rust">
+pub fn index(state: State, _req: Request) -&gt; (State, Response) {
+    let res = {
+        let crp = ChallengeRequestPath::borrow_from(&amp;state);
+        let name = &amp;crp.name;
+
+        let cqs = ChallengeQueryString::borrow_from(&amp;state);
+        let count = cqs.count;
+
+        let hello = match count {
+            Some(count) =&gt; {
+                format!(
+                    "Hello, {}.\nIzzy Mandelbaum can lift {} kgs, so more weight than you!!\n",
+                    name,
+                    count + 1
+                )
+            }
+            None =&gt; {
+                format!(
+                    "Hello, {}.\nIzzy Mandelbaum can lift more weight than you.\n",
+                    name
+                )
+            }
+        };
+
+        create_response(
+            &amp;state,
+            StatusCode::Ok,
+            Some((hello.into_bytes(), mime::TEXT_PLAIN)),
+        )
+    };
+
+    (state, res)
+}
                       </code>
                     </pre>
                   </div>
                 </div>
                 <div class="tab-pane " id="middleware" role="tabpanel">
                   <p>
-                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Middleware can add functionality to your application without duplicating code.
                   </p>
                   <div class="code-header">
-                    Middleware
+                    Using middleware
                   </div>
                   <div>
                     <pre>
                       <code class="hljs rust">
+// When defining a router, the middleware is added into a pipeline:
+new_pipeline()
+    .add(
+        NewSessionMiddleware::default()
+            .with_session_type::&lt;Session&gt;()
+    )
+// See our example app for a detailed example.
                       </code>
                     </pre>
                   </div>
-                </div>
-                <div class="tab-pane " id="routing" role="tabpanel">
-                  <p>
-                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                  </p>
                   <div class="code-header">
-                    Routes
+                    Handler
                   </div>
                   <div>
                     <pre>
                       <code class="hljs rust">
+pub fn index(state: State, _req: Request) -&gt; (State, Response) {
+    let response = {
+        // A value of type `SessionData&lt;Session&gt;` is added to `state` by the middleware
+        let session = SessionData::&lt;Session&gt;::borrow_from(&amp;state);
+
+        create_response(
+            &amp;state,
+            StatusCode::Ok,
+            Some((index_body(session.todo_list.clone()), mime::TEXT_HTML)),
+        )
+
+    };
+
+    (state, response)
+}
                       </code>
                     </pre>
                   </div>
                 </div>
                 <div class="tab-pane " id="launching" role="tabpanel">
                   <p>
-                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    A Gotham application compiles to a standard Rust binary.
                   </p>
                   <div class="code-header">
                     Main
@@ -215,6 +283,30 @@ $ curl -v http://127.0.0.1:7878/
                   <div>
                     <pre>
                       <code class="hljs rust">
+pub fn main() {
+    let addr = "127.0.0.1:7878".parse().unwrap();
+
+    let server = Http::new()
+        .bind(&amp;addr, NewHandlerService::new(router()))
+        .unwrap();
+
+    println!("Listening on http://{}", server.local_addr().unwrap());
+    server.run().unwrap();
+}
+                      </code>
+                    </pre>
+                  </div>
+                  <div class="code-header">
+                    Running
+                  </div>
+                  <div>
+                    <pre>
+                      <code class="hljs shell">
+$ cargo run
+   Compiling gotham-example-app v0.1.0
+    Finished dev [unoptimized + debuginfo] target(s) in 12.50 secs
+     Running `target/debug/gotham_example_app`
+Listening on http://127.0.0.1:7878
                       </code>
                     </pre>
                   </div>
@@ -266,11 +358,11 @@ $ curl -v http://127.0.0.1:7878/
                 <div class="card-block">
                   <h3 class="card-title">Policies</h3>
                   <p class="card-text">
-                    Gotham is a young project that we want to create an energetic and respectful community around. 
+                    Gotham is a young project that we want to create an energetic and respectful community around.
                   </p>
                   <p class="card-text">
                     As a starting point we've adopted the following <a
-                      href="https://github.com/gotham-rs/policies">policies</a> 
+                      href="https://github.com/gotham-rs/policies">policies</a>
                     which we'd like your help in refining further.
                   </p>
                   <p class="card-text">
@@ -294,7 +386,7 @@ $ curl -v http://127.0.0.1:7878/
 
                   <h4>IRC</h4>
                   <p class="card-text">
-                    We collaborate on the <a href="https://chat.mibbit.com/?server=irc.mozilla.org&channel=%23gotham" alt="Gotham IRC channel">#gotham</a> 
+                    We collaborate on the <a href="https://chat.mibbit.com/?server=irc.mozilla.org&channel=%23gotham" alt="Gotham IRC channel">#gotham</a>
                     channel on irc.mozilla.org. Gotham specific chat and requests for help are both very welcome here.
                   </p>
                   <p class="card-text">
@@ -317,8 +409,8 @@ $ curl -v http://127.0.0.1:7878/
               The core team is tasked with advancing the Gotham web framework.
             </p>
             <p>
-              As the project continues to mature so will our processes around core team membership, 
-              roles and responsibilities. This will be documented within our 
+              As the project continues to mature so will our processes around core team membership,
+              roles and responsibilities. This will be documented within our
               <a href="https://github.com/gotham-rs/policies" alt="Gotham policies on GitHub">policies</a> repository.
             </p>
 
@@ -335,10 +427,10 @@ $ curl -v http://127.0.0.1:7878/
                   <div class="card-text">
                     <ul class="list-unstyled card-text">
                       <li>
-                        <a href="https://github.com/smangelsdorf" alt="Shaun Mangelsdorf's GitHub">GitHub</a> 
+                        <a href="https://github.com/smangelsdorf" alt="Shaun Mangelsdorf's GitHub">GitHub</a>
                       </li>
                       <li>
-                        <a href="https://twitter.com/mangelsdorf" alt="Shaun Mangelsdorf's Twitter">Twitter</a> 
+                        <a href="https://twitter.com/mangelsdorf" alt="Shaun Mangelsdorf's Twitter">Twitter</a>
                       </li>
                       <li>
                         IRC: shaun
@@ -363,10 +455,10 @@ $ curl -v http://127.0.0.1:7878/
                   <div class="card-text">
                     <ul class="list-unstyled card-text">
                       <li>
-                        <a href="https://github.com/bradleybeddoes" alt="Bradley Beddoes' GitHub">GitHub</a> 
+                        <a href="https://github.com/bradleybeddoes" alt="Bradley Beddoes' GitHub">GitHub</a>
                       </li>
                       <li>
-                        <a href="https://twitter.com/bradleybeddoes" alt="Bradley Beddoes Twitter">Twitter</a> 
+                        <a href="https://twitter.com/bradleybeddoes" alt="Bradley Beddoes Twitter">Twitter</a>
                       </li>
                       <li>
                         IRC: bradley
@@ -375,7 +467,7 @@ $ curl -v http://127.0.0.1:7878/
                         City: Brisbane, Australia 🇦🇺
                       </li>
                       <li>
-                        Timezone: GMT+10. 
+                        Timezone: GMT+10.
                       </li>
                     </ul>
                   </div>
