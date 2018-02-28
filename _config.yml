@@ -1,19 +1,16 @@
 # Site settings
-# Accessed via {{ site.title }}, {{ site.email }}, and so on.
-#
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
-title: Gotham | A flexible web framework created in Rust
-description: > # this means to ignore newlines until "baseurl:"
+title: Gotham web framework
+email: gotham-admin@googlegroups.com
+description: >-
   A flexible web framework that promotes stability, safety, security and speed.
-baseurl: "" 
-url: "" 
-pagintate: 10
-paginate_path: "/blog/page:num/"
+baseurl: ""
+url: "https://gotham.rs"
+twitter_username: gotham_rs
+github_username:  gotham-rs
 
 # Build settings
 markdown: kramdown
-gems:
+plugins:
   - jekyll-feed
 
 # Exclude from processing.

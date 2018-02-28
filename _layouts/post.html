@@ -1,20 +1,18 @@
 ---
+layout: default
 ---
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+        {{ page.date | date: date_format }}
+      </time>
+    </p>
+  </header>
 
-<!DOCTYPE html>
-<html lang="en">
-    {% include head.html bg="light" %}
-    <body>
-      {% include top_nav.html %}
-
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            {% include article.html article=page %}            
-          </div>
-        </div>
-      </div>
-
-      {% include footer.html %}
-    </body>
-</html>
+  <div class="post-content" itemprop="articleBody">
+    {{ content }}
+  </div>
+</article>
