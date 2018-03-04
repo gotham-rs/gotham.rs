@@ -35,16 +35,20 @@
       </ul>
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane show active" id="pills-hello-world" role="tabpanel" aria-labelledby="pills-hello-world-tab">
-          <pre><code class="rust">{% include example_1 %}</code></pre>
+          {%- capture example_1 %}{% include example_1 %}{% endcapture %}
+          <pre><code class="rust">{{ example_1 | xml_escape }}</code></pre>
         </div>
         <div class="tab-pane" id="pills-routing" role="tabpanel" aria-labelledby="pills-routing-tab">
-          <pre><code class="rust">{% include example_2 %}</code></pre>
+          {%- capture example_2 %}{% include example_2 %}{% endcapture %}
+          <pre><code class="rust">{{ example_2 | xml_escape }}</code></pre>
         </div>
         <div class="tab-pane" id="pills-extractors" role="tabpanel" aria-labelledby="pills-extractors-tab">
-          <pre><code class="rust">{% include example_3 %}</code></pre>
+          {%- capture example_3 %}{% include example_3 %}{% endcapture %}
+          <pre><code class="rust">{{ example_3 | xml_escape }}</code></pre>
         </div>
         <div class="tab-pane" id="pills-middleware" role="tabpanel" aria-labelledby="pills-middleware-tab">
-          <pre><code class="rust">{% include example_4 %}</code></pre>
+          {%- capture example_4 %}{% include example_4 %}{% endcapture %}
+          <pre><code class="rust">{{ example_4 | xml_escape }}</code></pre>
         </div>
       </div>
     </div>
