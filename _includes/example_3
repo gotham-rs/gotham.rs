@@ -96,7 +96,7 @@ fn router() -> Router {
             .get("/products")
             // This tells the Router that for requests which match this route that query string
             // extraction should be invoked storing the result in a `QueryStringExtractor` instance.
-            .with_query_string_extractor::&lt;QueryStringExtractor&gt;()
+            .with_query_string_extractor::<QueryStringExtractor>()
             .to(get_product_handler);
     })
 }
