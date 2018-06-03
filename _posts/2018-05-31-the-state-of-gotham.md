@@ -6,6 +6,10 @@ categories: blog
 author: Shaun Mangelsdorf
 ---
 
+**Update (2018-06-04)**: The call for maintainers has been answered. Stay tuned.
+
+---
+
 When we set out to build Gotham, we had some main ideas that helped to shape it:
 
 * A framework that runs on stable Rust, taking advantage of as much as possible
