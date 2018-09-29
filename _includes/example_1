@@ -9,6 +9,8 @@ use hyper::{Response, StatusCode};
 use gotham::http::response::create_response;
 use gotham::state::State;
 
+const HELLO_WORLD: &'static str = "Hello World!";
+
 /// Create a `Handler` which is invoked when responding to a `Request`.
 ///
 /// How does a function become a `Handler`?.
@@ -17,8 +19,8 @@ use gotham::state::State;
 pub fn say_hello(state: State) -> (State, Response) {
     let res = create_response(
         &state,
-        StatusCode::Ok,
-        Some((String::from("Hello World!").into_bytes(), mime::TEXT_PLAIN)),
+        StatusCode::OK,
+        (HELLO_WORLD, mime::TEXT_PLAIN)
     );
 
     (state, res)
