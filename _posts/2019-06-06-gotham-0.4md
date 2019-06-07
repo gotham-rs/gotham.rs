@@ -22,7 +22,6 @@ Creation of a TLS server is consistent with the existing Gotham API, with
 the only difference being the requirement of a `rustls::ServerConfig` to
 be provided at server startup:
 
-
 ```rust
 let addr = "127.0.0.1:7878";
 let config = rustls::ServerConfig::new(...);
@@ -79,7 +78,9 @@ If you have any existing middlewares dealing with cookies, maybe for
 things like authorization, you can now place them after the `CookieParser`
 in the middleware chain and they will then also have access to the new
 `CookieJar` entity. This allows you to remove any custom cookie parsing
-that you may have had to write in the past.
+that you may have had to write in the past. One example of this is the
+existing `SessionMiddleware`, which will now look for any previously
+parsed cookies t avoid doing unnecessary work.
 
 An example of this middleware is available in the repository, so please
 do [check it out](https://github.com/gotham-rs/gotham/tree/master/examples/cookies/introduction).
@@ -150,7 +151,17 @@ TODO!
 
 ## Miscellaneous
 
-In addition to these new features, we have also updated dependencies to
+Although not technically part of the Gotham core release, we have also
+added several new examples to the repository. Thank you to all who had
+any input in the creation of:
+
+- [Askama Templating](https://github.com/gotham-rs/gotham/tree/master/examples/templating/askama)
+- [Cookies Middleware](https://github.com/gotham-rs/gotham/tree/master/examples/cookies/introduction)
+- [Diesel Middleware](https://github.com/gotham-rs/gotham/tree/master/examples/diesel)
+- [Graceful Shutdown](https://github.com/gotham-rs/gotham/tree/master/examples/hello_world_until)
+- [Multiple Pipelines](https://github.com/gotham-rs/gotham/tree/master/examples/middleware/multiple_pipelines)
+
+In addition to everything mentioned, we have also updated dependencies to
 their latest versions as well as migrated the codebase to compile under
 Rust 2018 edition to make contribution a little easier. So please do
 get involved if there's something you'd like to see included!
