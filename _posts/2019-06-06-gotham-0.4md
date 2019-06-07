@@ -1,0 +1,156 @@
+---
+layout: post
+title: Announcing Gotham 0.4
+date: 2019-06-06 17:16
+categories: blog release
+author: Isaac Whitfield
+---
+
+It's been a little while, but today we're happy to announce the latest release
+of the Gotham web framework: Gotham 0.4! This release focuses on some of the
+more common use cases when writing web services, by introducing several new
+middlewares and features to improve productivity when working with Gotham.
+
+## TLS Support
+
+One of the larger features included in this release is the support for TLS
+when working with Gotham. This is handled via the popular Rust TLS library
+[rustls](https://github.com/ctz/rustls), in combination with the Tokio
+bindings provided by [tokio-rustls](https://github.com/quininer/tokio-rustls).
+
+Creation of a TLS server is consistent with the existing Gotham API, with
+the only difference being the requirement of a `rustls::ServerConfig` to
+be provided at server startup:
+
+
+```rust
+let addr = "127.0.0.1:7878";
+let config = rustls::ServerConfig::new(...);
+
+gotham::tls::start(addr, config, || Ok(say_hello))
+```
+
+This simple tweak to the API makes it easy to handle TLS connections without
+having to learn an entire new set of APIs.
+
+## Middlewares
+
+Gotham 0.4 includes work on a few new middlewares designed to improve some
+common use cases, and fit in with common patterns when writing web services.
+Each of the middlewares below is available in either the core of Gotham 
+itself, or distributed as a separate crate on [crates.io](http://crates.io/).
+
+### Cookie Middleware
+
+Gotham 0.4 also includes a new middleware named `CookieParser`, which is
+designed to make dealing with cookies much simpler and in a much more 
+automatic fashion. All parsing of cookies is done via the de-facto
+[cookie](https://github.com/alexcrichton/cookie-rs) crate. 
+
+Unlike some of the other middlewares, the `CookieParser` middleware ships
+directly in Gotham's core library due to it being re-used in the existing
+`SessionMiddleware` workflows, and as it's such a common requirement when
+building a web service.
+
+To use this middleware, configure it as any other middleware inside your
+router:
+
+```rust
+// create a middleware pipeline from our middleware
+let pipeline = single_middleware(CookieParser);
+
+// construct a basic chain from our pipeline
+let (chain, pipelines) = single_pipeline(pipeline);
+
+// build a router with the chain & pipeline
+gotham::start("127.0.0.1:7878", build_router(chain, pipelines, |route| {
+    route.get("/").to(say_hello);
+}))
+```
+
+Then you will automatically have a `CookieJar` available on the `State`
+provided to your request, which you can easily access as needed:
+
+```rust
+CookieJar::borrow_from(&state)
+```
+
+If you have any existing middlewares dealing with cookies, maybe for
+things like authorization, you can now place them after the `CookieParser`
+in the middleware chain and they will then also have access to the new
+`CookieJar` entity. This allows you to remove any custom cookie parsing
+that you may have had to write in the past.
+
+An example of this middleware is available in the repository, so please
+do [check it out](https://github.com/gotham-rs/gotham/tree/master/examples/cookies/introduction).
+
+### Diesel Middleware
+
+[Diesel](https://github.com/diesel-rs/diesel) is a very popular ORM
+written in Rust, and there has been some work in progress for a compatible
+middleware for some time. Thanks to the work of `@colinbankier` this
+is now available via the `gotham_middleware_diesel` crate, which offers
+a convenient API for interacting with Diesel from Gotham.
+
+This middleware introduces a `Repo` struct, which is used as a layer
+between Diesel and Gotham to ensure that database interaction lives on
+a separate thread pool to the one connections are being served on. This
+structure is fairly straightfoward and offers an easy way to interact
+with Diesel from inside Gotham:
+
+```rust
+// create a new repo, in this case just using a SQLite setup
+let repo: Repo<SqliteConnection> = Repo::new("products.db");
+
+// create a middleware pipeline from our middleware
+let pipeline = single_middleware(DieselMiddleware::new(repo));
+
+// construct a basic chain from our pipeline
+let (chain, pipelines) = single_pipeline(pipeline);
+
+// build a router with the chain & pipeline
+gotham::start("127.0.0.1:7878", build_router(chain, pipelines, |route| {
+    route.get("/").to(say_hello);
+}))
+```
+
+From there you gain simple access to `Repo` on the request state, just
+like when using other middlewares. You can then use the `Repo` to execute
+database calls on a separate connection pool:
+
+```rust
+// borrow the repo from the state
+let repo = Repo::borrow_from(&state);
+
+// execute database calls
+repo.run(move |conn| {
+    diesel::insert_into(products::table)
+        .values(&product)
+        .execute(&conn)
+})
+```
+
+What may not be obvious from the snippet above is that calling `repo.run`
+actually returns a `Future`, allowing you to seamlessly sprinkle your
+database calls amongst other asynchronous handler code without going
+through too much pain.
+
+This is the main advantage of the `Repo` type as it manages the
+synchronous calls of the underlying connections on a separate thread
+pool, and maintains the appearance that you're working with an API
+that's fully asynchronous to keep things simple.
+
+Naturally a complete example of database interaction is a little too
+long to embed into a blog post, so please check out the excellent
+examples Colin provided in the [main repository](https://github.com/gotham-rs/gotham/tree/master/examples/diesel).
+
+### JWT Middleware
+
+TODO!
+
+## Miscellaneous
+
+In addition to these new features, we have also updated dependencies to
+their latest versions as well as migrated the codebase to compile under
+Rust 2018 edition to make contribution a little easier. So please do
+get involved if there's something you'd like to see included!
