@@ -1,6 +1,7 @@
 //! A Hello World example application for working with Gotham.
 
 extern crate gotham;
+extern crate http;
 
 use gotham::state::State;
 
@@ -26,6 +27,7 @@ pub fn main() {
 mod tests {
     use super::*;
     use gotham::test::TestServer;
+    use http::status::StatusCode;
 
     #[test]
     fn receive_hello_world_response() {
@@ -36,6 +38,7 @@ mod tests {
             .perform()
             .unwrap();
 
+        // requires http 0.1.21
         assert_eq!(response.status(), StatusCode::Ok);
 
         let body = response.read_body().unwrap();
