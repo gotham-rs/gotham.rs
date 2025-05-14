@@ -1,11 +1,10 @@
 # Site settings
 title: Gotham web framework
-email: gotham-admin@googlegroups.com
+email: git@msrd0.de
 description: >-
   A flexible web framework that promotes stability, safety, security and speed.
-baseurl: ""
-url: "https://gotham.rs"
-twitter_username: gotham_rs
+baseurl: "/gotham.rs/"
+url: "https://gotham-rs.github.io/gotham.rs/"
 github_username:  gotham-rs
 
 # Build settings
