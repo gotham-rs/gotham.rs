@@ -13,4 +13,4 @@ $ bundle install
 $ bundle exec jekyll serve
 ```
 
-Visit website here: <https://gotham-rs.github.io/gotham.rs/>
+Visit website here: <https://gotham.rs>

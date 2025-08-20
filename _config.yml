@@ -3,8 +3,8 @@ title: Gotham web framework
 email: git@msrd0.de
 description: >-
   A flexible web framework that promotes stability, safety, security and speed.
-baseurl: "/gotham.rs/"
-url: "https://gotham-rs.github.io/gotham.rs/"
+baseurl: ""
+url: "https://gotham.rs"
 github_username:  gotham-rs
 
 # Build settings
